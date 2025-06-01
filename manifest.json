@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "Instagram Video Controls",
+  "version": "0.1",
+  "description": "A test extension that logs when Instagram loads.",
+  "permissions": [],
+  "host_permissions": [
+    "https://www.instagram.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://www.instagram.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "icons": {
+    "48": "favicon.ico",
+    "192": "icon192.png"
+  }
+}
