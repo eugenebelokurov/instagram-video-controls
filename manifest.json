@@ -14,6 +14,12 @@
       "run_at": "document_idle"
     }
   ],
+  "web_accessible_resources": [
+    {
+      "resources": ["thumbnail-image.jpg"],
+      "matches": ["<all_urls>"]
+    }
+  ],
   "icons": {
     "48": "favicon.ico",
     "192": "icon192.png"
