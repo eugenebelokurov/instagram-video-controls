@@ -8,7 +8,7 @@ function addProgressBar(video) {
   barContainer.style.left = '0';
   barContainer.style.right = '0';
   barContainer.style.bottom = '0';
-  barContainer.style.height = '6px';
+  barContainer.style.height = '4px';
   barContainer.style.background = 'rgba(255, 255, 255, 0.2)';
   barContainer.style.zIndex = '9999';
   barContainer.style.cursor = 'pointer';
@@ -30,7 +30,7 @@ function addProgressBar(video) {
   const progress = document.createElement('div');
   progress.style.height = '100%';
   progress.style.width = '0%';
-  progress.style.background = '#0095f6';
+  progress.style.background = '#ffffff';
   progress.style.transition = 'width 0.1s linear';
   barContainer.appendChild(progress);
 
@@ -58,8 +58,8 @@ function addProgressBar(video) {
   thumbnail.style.display = 'none';
   thumbnail.style.zIndex = '10000';
   thumbnail.style.overflow = 'hidden';
-  thumbnail.style.width = '160px';
-  thumbnail.style.height = '90px';
+  thumbnail.style.width = '90px';
+  thumbnail.style.height = '160px';
 
   const thumbnailCanvas = document.createElement('canvas');
   thumbnailCanvas.style.width = '100%';
@@ -104,7 +104,7 @@ function addProgressBar(video) {
     parent.style.position = 'relative';
   }
   parent.appendChild(barContainer);
-  parent.appendChild(barBufferContainer);
+  // parent.appendChild(barBufferContainer);
 
   // --- Caching setup ---
   if (!video._keyFrameCanvases) video._keyFrameCanvases = {};
@@ -195,12 +195,16 @@ function addProgressBar(video) {
     thumbnail.style.display = 'none';
   });
 
-  video.addEventListener('progress', updateBufferCanvas);
-  video.addEventListener('loadedmetadata', updateBufferCanvas);
-  video.addEventListener('durationchange', updateBufferCanvas);
-  window.addEventListener('resize', updateBufferCanvas);
+  // Make the bar slightly taller on hover for easier interaction 
+  barContainer.addEventListener('mouseenter', () => { barContainer.style.height = '8px'; }); 
+  barContainer.addEventListener('mouseleave', () => { barContainer.style.height = '4px'; });
 
-  updateBufferCanvas();
+  // video.addEventListener('progress', updateBufferCanvas);
+  // video.addEventListener('loadedmetadata', updateBufferCanvas);
+  // video.addEventListener('durationchange', updateBufferCanvas);
+  // window.addEventListener('resize', updateBufferCanvas);
+
+  // updateBufferCanvas();
 }
 
 function enhanceVideos() {
