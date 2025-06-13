@@ -221,3 +221,56 @@ enhanceVideos();
 
 const observer = new MutationObserver(enhanceVideos);
 observer.observe(document.body, { childList: true, subtree: true });
+
+
+/**
+ * Helper to show/hide Instagram tabs by link href
+ */
+function toggleByLink(path, hide) {
+  document
+    .querySelectorAll(`a[href="${path}"]`)
+    .forEach(link => {
+      // Go up 3 parent nodes: a → div → span → div
+      let container = link;
+      for (let i = 0; i < 3; i++) {
+        if (container.parentElement) {
+          container = container.parentElement;
+        } else {
+          container = null;
+          break;
+        }
+      }
+      if (container) {
+        container.style.display = hide ? 'none' : '';
+      }
+    });
+}
+
+function toggleStoryTray(hide) {
+  const tray = document.querySelector('div[data-pagelet="story_tray"]');
+  if (tray) tray.style.display = hide ? 'none' : '';
+}
+
+// Mapping of keys to handlers
+const toggleHandlers = {
+  hideExplore: on => toggleByLink('/explore/', on),
+  hideReels: on => toggleByLink('/reels/', on),
+  hideStories: on => toggleStoryTray(on),
+  // add more handlers if needed
+};
+
+// On initial load, read saved preferences and apply
+chrome.storage.sync.get(Object.keys(toggleHandlers), prefs => {
+  for (const key in prefs) {
+    if (prefs[key] !== undefined && toggleHandlers[key]) {
+      toggleHandlers[key](prefs[key]);
+    }
+  }
+});
+
+// Listen for messages from popup.js
+chrome.runtime.onMessage.addListener((msg, sender) => {
+  if (msg.type === 'toggle-update' && toggleHandlers[msg.key] !== undefined) {
+    toggleHandlers[msg.key](msg.value);
+  }
+});
