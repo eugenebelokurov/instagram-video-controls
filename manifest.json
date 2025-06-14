@@ -3,7 +3,10 @@
   "name": "Instagram Video Controls",
   "version": "0.1",
   "description": "A test extension that logs when Instagram loads.",
-  "permissions": ["storage", "scripting"],
+  "permissions": ["storage", "scripting", "webNavigation"],
+  "background": {
+    "service_worker": "background.js"
+  },
   "host_permissions": [
     "https://www.instagram.com/*"
   ],
@@ -15,12 +18,6 @@
       "matches": ["https://www.instagram.com/*"],
       "js": ["content.js"],
       "run_at": "document_idle"
-    }
-  ],
-  "web_accessible_resources": [
-    {
-      "resources": ["thumbnail-image.jpg"],
-      "matches": ["<all_urls>"]
     }
   ],
   "icons": {

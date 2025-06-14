@@ -1,3 +1,5 @@
+// ============= VIDEO ENHANCEMENT =============
+// This entire section is unchanged.
 function addProgressBar(video) {
   if (video.dataset.progressBarAdded) return;
   video.dataset.progressBarAdded = 'true';
@@ -104,7 +106,6 @@ function addProgressBar(video) {
     parent.style.position = 'relative';
   }
   parent.appendChild(barContainer);
-  // parent.appendChild(barBufferContainer);
 
   // --- Caching setup ---
   if (!video._keyFrameCanvases) video._keyFrameCanvases = {};
@@ -195,16 +196,9 @@ function addProgressBar(video) {
     thumbnail.style.display = 'none';
   });
 
-  // Make the bar slightly taller on hover for easier interaction 
-  barContainer.addEventListener('mouseenter', () => { barContainer.style.height = '8px'; }); 
+  // Make the bar slightly taller on hover for easier interaction
+  barContainer.addEventListener('mouseenter', () => { barContainer.style.height = '8px'; });
   barContainer.addEventListener('mouseleave', () => { barContainer.style.height = '4px'; });
-
-  // video.addEventListener('progress', updateBufferCanvas);
-  // video.addEventListener('loadedmetadata', updateBufferCanvas);
-  // video.addEventListener('durationchange', updateBufferCanvas);
-  // window.addEventListener('resize', updateBufferCanvas);
-
-  // updateBufferCanvas();
 }
 
 function enhanceVideos() {
@@ -217,60 +211,153 @@ function enhanceVideos() {
   });
 }
 
-enhanceVideos();
-
-const observer = new MutationObserver(enhanceVideos);
-observer.observe(document.body, { childList: true, subtree: true });
-
-
-/**
- * Helper to show/hide Instagram tabs by link href
- */
-function toggleByLink(path, hide) {
-  document
-    .querySelectorAll(`a[href="${path}"]`)
-    .forEach(link => {
-      // Go up 3 parent nodes: a → div → span → div
-      let container = link;
-      for (let i = 0; i < 3; i++) {
-        if (container.parentElement) {
-          container = container.parentElement;
-        } else {
-          container = null;
-          break;
-        }
-      }
-      if (container) {
-        container.style.display = hide ? 'none' : '';
-      }
+function initializeVideoEnhancement() {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      enhanceVideos();
+      const videoObserver = new MutationObserver(enhanceVideos);
+      videoObserver.observe(document.body, { childList: true, subtree: true });
     });
+  } else {
+    enhanceVideos();
+    const videoObserver = new MutationObserver(enhanceVideos);
+    videoObserver.observe(document.body, { childList: true, subtree: true });
+  }
 }
 
-function toggleStoryTray(hide) {
-  const tray = document.querySelector('div[data-pagelet="story_tray"]');
-  if (tray) tray.style.display = hide ? 'none' : '';
+// ============= INSTAGRAM ELEMENT HIDING (LOGIC INVERTED) =============
+
+let hideStyleSheet = null;
+
+function injectHidingCSS() {
+  if (hideStyleSheet) return hideStyleSheet;
+  
+  const style = document.createElement('style');
+  style.id = 'instagram-hider-styles';
+  document.head.appendChild(style);
+  hideStyleSheet = style.sheet;
+  
+  return hideStyleSheet;
 }
 
-// Mapping of keys to handlers
-const toggleHandlers = {
-  hideExplore: on => toggleByLink('/explore/', on),
-  hideReels: on => toggleByLink('/reels/', on),
-  hideStories: on => toggleStoryTray(on),
-  // add more handlers if needed
+function updateHidingCSS(rules) {
+  const sheet = injectHidingCSS();
+  
+  while (sheet.cssRules.length > 0) {
+    sheet.deleteRule(0);
+  }
+  
+  rules.forEach(rule => {
+    try {
+      sheet.insertRule(rule, sheet.cssRules.length);
+    } catch (e) {
+      console.warn('Failed to insert CSS rule:', rule, e);
+    }
+  });
+}
+
+// *** LOGIC IS INVERTED HERE ***
+// This function generates CSS rules to hide elements when their toggle is OFF.
+function applyCSSToggles(prefs) {
+  const rules = [];
+  
+  // If showExplore is NOT true, hide it. It will be hidden if the value is false or undefined.
+  if (!prefs.showExplore) {
+    rules.push('div:has(> a[href="/explore/"]) { display: none !important; }');
+  }
+  
+  // If showReels is NOT true, hide it.
+  if (!prefs.showReels) {
+    rules.push('div:has(> a[href="/reels/"]) { display: none !important; }');
+  }
+  
+  // If showStories is NOT true, hide it.
+  if (!prefs.showStories) {
+    rules.push('div[data-pagelet="story_tray"] { display: none !important; }');
+  }
+  
+  updateHidingCSS(rules);
+}
+
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
+
+function reapplyToggles() {
+  // The keys here must match the NEW keys used in popup.js
+  const prefKeys = ['showStories', 'showExplore', 'showReels'];
+  
+  chrome.storage.sync.get(prefKeys, prefs => {
+    applyCSSToggles(prefs);
+  });
+}
+
+const debouncedReapply = debounce(reapplyToggles, 100);
+
+function initializeToggles() {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', reapplyToggles);
+  } else {
+    reapplyToggles();
+  }
+}
+
+// --- INITIALIZATION ---
+initializeVideoEnhancement();
+initializeToggles();
+
+// --- LISTENERS ---
+
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+  if (msg.type === 'toggle-update' || msg.type === 'reapply-toggles') {
+    reapplyToggles();
+    sendResponse({ success: true });
+  }
+});
+
+let currentUrl = location.href;
+
+function handleNavigation() {
+  if (location.href !== currentUrl) {
+    currentUrl = location.href;
+    setTimeout(debouncedReapply, 300);
+  }
+}
+
+const originalPushState = history.pushState;
+history.pushState = function(...args) {
+  originalPushState.apply(history, args);
+  handleNavigation();
 };
 
-// On initial load, read saved preferences and apply
-chrome.storage.sync.get(Object.keys(toggleHandlers), prefs => {
-  for (const key in prefs) {
-    if (prefs[key] !== undefined && toggleHandlers[key]) {
-      toggleHandlers[key](prefs[key]);
-    }
-  }
-});
+const originalReplaceState = history.replaceState;
+history.replaceState = function(...args) {
+  originalReplaceState.apply(history, args);
+  handleNavigation();
+};
 
-// Listen for messages from popup.js
-chrome.runtime.onMessage.addListener((msg, sender) => {
-  if (msg.type === 'toggle-update' && toggleHandlers[msg.key] !== undefined) {
-    toggleHandlers[msg.key](msg.value);
-  }
-});
+window.addEventListener('popstate', handleNavigation);
+
+const navObserver = new MutationObserver(debouncedReapply);
+
+function startNavObserver() {
+  const mainContent = document.querySelector('main') || document.body;
+  navObserver.observe(mainContent, {
+    childList: true,
+    subtree: true
+  });
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', startNavObserver);
+} else {
+  startNavObserver();
+}
