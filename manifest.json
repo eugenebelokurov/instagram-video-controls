@@ -1,9 +1,9 @@
 {
   "manifest_version": 3,
-  "name": "Instagram Video Controls",
+  "name": "conscious – Instagram video controls and Stories/Reels/Explore hiding",
   "version": "0.1",
-  "description": "A test extension that logs when Instagram loads.",
-  "permissions": ["storage", "scripting", "webNavigation"],
+  "description": "Add video controls on Instagram and hide Stories, Reels, Explore.",
+  "permissions": ["storage", "webNavigation", "activeTab"],
   "background": {
     "service_worker": "background.js"
   },
@@ -21,7 +21,8 @@
     }
   ],
   "icons": {
-    "48": "favicon.ico",
-    "192": "icon192.png"
+    "16": "16.png",
+    "48": "48.png",
+    "128": "128.png"
   }
 }

@@ -44,3 +44,13 @@ function onToggleChange(event) {
     }
   });
 }
+
+document.getElementById("supportMe").addEventListener("click", function () {
+    const url = "https://coff.ee/eugn.me";
+    window.open(url, "_blank");
+});
+
+document.getElementById("feedbackBtn").addEventListener("click", () => {
+    const url = "https://tally.so/r/mJrWEK";
+    window.open(url, "_blank");
+});

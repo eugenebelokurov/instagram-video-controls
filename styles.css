@@ -2,12 +2,16 @@
 body {
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 400;
   margin: 0;
-  padding: 12px;
-  width: 220px;
+  padding: 4px;
+  width: 320px;
+  height: 100%;
   background: #fff;
   border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 /* each row */
@@ -15,8 +19,6 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  /* padding: 12px 16px; */
-  margin-bottom: 6px;
   border-radius: 8px;
   /* transition: background 0.2s; */
 }
@@ -28,11 +30,13 @@ body {
 .label {
   display: flex;
   align-items: center;
+  color: #ffffff;
 }
 .icon {
   width: 22px;
   height: 22px;
   margin-right: 6px;
+  border-color: #ffffff;
 }
 
 /* custom toggle switch */
@@ -51,7 +55,7 @@ body {
   position: absolute;
   cursor: pointer;
   inset: 0;
-  background-color: #ccc;
+  background-color: #333333;
   border-radius: 10px;
   transition: background-color 0.2s;
 }
@@ -67,7 +71,7 @@ body {
   transition: transform 0.2s;
 }
 .switch input:checked + .slider {
-  background-color: #0C1014;
+  background-color: #A3A3A3;
 }
 .switch input:checked + .slider::before {
   transform: translateX(16px);
@@ -83,23 +87,138 @@ section {
   display: flex;
   flex-direction: column;
   gap: 0px;
+  padding-left: 16px;
 }
 
 .section-title {
   font-size: 12px;
   font-weight: 600;
+  color: #ffffff;
   margin: 0; 
 }
 
 .section-description {
   font-size: 12px;
+  line-height: 150%;
   font-weight: 400;
-  color: #666;
-   margin: 0; 
+  color: #E2E2E2;
+  margin: 0; 
 }
 
 .section-content {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
+}
+
+#contacts {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 8px;
+  padding-bottom: 2px;
+}
+
+#contacts p {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 400;
+  color: #ffffff;
+}
+
+#contacts a {
+  font-size: 12px;
+  color: #ffffff;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.separator {
+  background-color: rgba(255, 255, 255, 0.06);
+  border: none;
+  margin: 0;
+  height: 1px;
+  width: 100%;
+}
+
+button {
+  border-radius: 9999px;
+  background-color: #1E1E1E;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 12px 16px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  color: #E8E8E8;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.main-body{
+  background-color: #1E1E1E;
+  border-radius: 9px;
+  padding: 12px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+#settings {
+  border: 1px solid #333333;
+  border-radius: 12px;
+  padding: 12px 16px;
+}
+
+#thoughts {
+  display: grid;
+  /* grid-template-columns: 1fr 1fr; */
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+#thoughts button:hover {
+  /* border: 1px solid rgba(255, 255, 255, 0.4); */
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+#supportMe {
+  border: 1px solid #3D3204;
+  background-color: #3D3204;
+  border-radius: 8px;
+  padding: 16px;
+}
+#supportMe:hover {
+  border: 1px solid #B7910D;
+  background-color: #3D3204;
+  border-radius: 8px;
+  padding: 16px;
+  cursor: pointer;
+}
+
+.popup-container {
+  background-color: #0C0C0C;
+  padding: 6px;
+  border-radius: 12px;
+}
+
+#line {
+  background-color: #ffffff;
+  height: 1.5px;
+  width: 100%;
+}
+
+#header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  color: #ffffff;
+  padding-left: 8px;
+  padding-bottom: 6px;
+  padding-right: 8px;
+}
+
+#header p {
+  font-size: 12px;
+  font-weight: 600;
 }

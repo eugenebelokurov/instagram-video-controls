@@ -5,46 +5,92 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <section>
-    <div class="section-header">
-      <p class="section-title">Your settings</p>
-      <p class="section-description">Saved between sessions</p>
+  <div class="popup-container">
+    <div id="header">
+      <p>conscious</p>
+      <div id="line"></div>
     </div>
-    <div class="section-content">
-      <div class="toggle-row">
-        <div class="label">
-          <img src="icons/stories.svg" alt="" class="icon">
-          <span>Show Stories</span>
+    <div class="main-body">
+      <section>
+        <div class="section-header">
+          <p class="section-title">Your settings</p>
+          <p class="section-description">Saved between sessions</p>
         </div>
-        <label class="switch">
-          <input type="checkbox" id="toggle-stories">
-          <span class="slider"></span>
-        </label>
-      </div>
+        <div class="section-content" id="settings">
+          <div class="toggle-row">
+            <div class="label">
+              <img src="icons/stories.svg" alt="" class="icon">
+              <span>Show Stories</span>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="toggle-stories">
+              <span class="slider"></span>
+            </label>
+          </div>
 
-      <div class="toggle-row">
-        <div class="label">
-          <img src="icons/explore.svg" alt="" class="icon">
-          <span>Show Explore</span>
-        </div>
-        <label class="switch">
-          <input type="checkbox" id="toggle-explore">
-          <span class="slider"></span>
-        </label>
-      </div>
+          <div class="separator"></div>
 
-      <div class="toggle-row">
-        <div class="label">
-          <img src="icons/reels.svg" alt="" class="icon">
-          <span>Show Reels</span>
+          <div class="toggle-row">
+            <div class="label">
+              <img src="icons/explore.svg" alt="" class="icon">
+              <span>Show Explore</span>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="toggle-explore">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="separator"></div>
+
+          <div class="toggle-row">
+            <div class="label">
+              <img src="icons/reels.svg" alt="" class="icon">
+              <span>Show Reels</span>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="toggle-reels">
+              <span class="slider"></span>
+            </label>
+          </div>
         </div>
-        <label class="switch">
-          <input type="checkbox" id="toggle-reels">
-          <span class="slider"></span>
-        </label>
-      </div>
+      </section>
+
+      <div class="separator"></div>
+
+      <section>
+        <div class="section-header">
+          <p class="section-title">Your thoughts</p>
+          <p class="section-description">Report a bug, suggest idea or just say hi.</p>
+        </div>
+        <div class="section-content" id="thoughts">
+          <button id="feedbackBtn">
+            Share feedback
+          </button>
+          <!-- <button id="rateBtn">
+            Rate extension
+          </button> -->
+        </div>
+
+      </section>
+
+      <div class="separator"></div>
+
+      <section>
+        <div id="supportMe">
+          <div>
+            <p class="section-title">Support my work</p>
+            <p class="section-description">The extension is free and will be free. If you feel like it helped you, you can buy me a coffee.</p>
+          </div>
+        </div>
+
+      </section>
+
+      <secion id="contacts">
+        <p>Created by <a href="https://www.eugn.me/" target="_blank">Eugene</a></p>
+      </secion>
     </div>
-  </section>
+  </div>
 
   <script src="popup.js"></script>
 </body>
